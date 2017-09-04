@@ -30,14 +30,32 @@ class QuoteForm extends Component {
     let topic = searchObject.TopicinputValue;
     let startYear = searchObject.StartYearinputValue;
     let endYear = searchObject.EndYearinputValue;
-    console.log(topic);
-    console.log(startYear);
-    console.log(endYear);
-  }
+
+    var authKey = "aa7ca2b60183476e8cfcf2c932d2936d";
+    // Based on the queryTerm we will create a queryURL 
+    var queryURLBase = "https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=" + authKey + "&q=";
+    
+    // Array to hold the various article info
+    var articleCounter = 0;
+
+      // The AJAX function uses the URL and Gets the JSON data associated with it. The data then gets stored in the variable called: "NYTData"
+      $.ajax({url: queryURLBase, method: "GET"}) 
+        .done(function(NYTData) {
+    
+          // Here we are logging the URL so we have access to it for troubleshooting
+          console.log("------------------------------------")
+          console.log("URL: " + queryURLBase);
+          console.log("------------------------------------")
+    
+          // Here we then log the NYTData to console, where it will show up as an object.
+          console.log(NYTData);
+          console.log("------------------------------------")
+        }
+        )}
 
   handleButtonClick() {
     const searchArticle = this.state;
-    NYTAPICall(searchArticle);
+    this.NYTAPICall(searchArticle);
     this.setState({ TopicinputValue: "",
                     StartYearinputValue: "",
                     EndYearinputValue: "",
