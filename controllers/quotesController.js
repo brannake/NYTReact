@@ -3,6 +3,7 @@ var Article = require("../models/article");
 module.exports = {
   // This method handles retrieving quotes from the db
   index: function(req, res) {
+    console.log("IT RAN");
     var query;
     if (req.query) {
       query = req.query;
@@ -15,10 +16,12 @@ module.exports = {
         res.json(doc);
       }).catch(function(err) {
         res.json(err);
+        console.log(res);
       });
   },
   // This method handles creating new quotes
   create: function(req, res) {
+    console.log(req.body);
     var titleField = req.body.text;
     Article.create({title: titleField}).then(function(doc) {
       console.log(doc);

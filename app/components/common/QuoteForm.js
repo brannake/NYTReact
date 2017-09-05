@@ -8,6 +8,7 @@ class QuoteForm extends Component {
       TopicinputValue: "",
       StartYearinputValue: "",
       EndYearinputValue: "",
+      Favorites: ""
     };
     // Binding handleInputChange and handleButtonClick since we'll be passing them as
     // callbacks and 'this' will change otherwise
@@ -16,6 +17,7 @@ class QuoteForm extends Component {
     this.handleEndYearInputChange = this.handleEndYearInputChange.bind(this);
     this.handleButtonClick = this.handleButtonClick.bind(this);
     this.NYTAPICall = this.NYTAPICall.bind(this);
+    this.SaveButton = this.SaveButton.bind(this);
   }
   handleTopicInputChange(event) {
     this.setState({ TopicinputValue: event.target.value });
@@ -25,6 +27,14 @@ class QuoteForm extends Component {
   }
   handleEndYearInputChange(event) {
     this.setState({ EndYearinputValue: event.target.value });
+  }
+
+  SaveButton(abstract) {
+    API.saveQuote(abstract).then((res) => {
+      console.log(res);
+      const favoriteArticles = res.data;
+      this.setState({Favorites: favoriteArticles}, function() {console.log(this.state)});
+    });
   }
 
   NYTAPICall(searchObject) {
@@ -45,9 +55,7 @@ class QuoteForm extends Component {
       
     $.ajax({url: queryURL, method: "GET"}) 
         .done((NYTData) => {
-          // Here we are logging the URL so we have access to it for troubleshooting
           console.log("URL: " + queryURL);
-          // Here we then log the NYTData to console, where it will show up as an object.
           console.log(NYTData);
           this.setState({ArticleResponse: NYTData});
         });
@@ -108,17 +116,21 @@ class QuoteForm extends Component {
             >
               Submit
             </button>
-            <textarea
-              style={{
-                resize: "none"
-              }}
-              onChange={this.handleEndYearInputChange}
-              value={this.state.EndYearinputValue}
-              placeholder="End Year"
-              className="form-control"
-              id="input-box"
-              rows="3"
-            />
+            <div
+            >
+            {this.state.ArticleResponse.response.docs.map(doc =>
+            <div key={doc.abstract}>{doc.abstract}
+              <button
+              onClick={this.SaveButton(doc.abstract)}
+              className="btn btn-success"
+              style={styles.buttonStyle}
+              >
+              Save  
+              </button>
+              <br/>
+            </div>
+          )}
+            </div>
           </div>
         </div>
       );
@@ -171,9 +183,9 @@ class QuoteForm extends Component {
           </button>
         </div>
       </div>
-    );
+      );
+    }
   }
-}
 }
 
 const styles = {
