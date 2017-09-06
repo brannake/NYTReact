@@ -6,7 +6,7 @@ class Favorites extends Component {
   constructor() {
     super();
     this.state = {
-      quotes: []
+      articles: []
     };
     // Binding getQuotes to this component since we'll be passing this method to 
     // other components to use
@@ -18,15 +18,15 @@ class Favorites extends Component {
   }
   getQuotes() {
     API.getQuotes().then((res) => {
-      const favoriteQuotes = res.data.filter(quote => quote.favorited);
-      this.setState({ quotes: favoriteQuotes });
+      const favoriteArticles = res.data.filter(article => article.favorited);
+      this.setState({ articles: favoriteArticles });
     });
   }
   // A helper method for rendering one panel for each quote
   renderQuotes() {
-    return this.state.quotes.map(quote => (
+    return this.state.articles.map(article => (
       <Panel
-        quote={quote}
+        article={article}
         key={quote._id}
         getQuotes={this.getQuotes}
       />
@@ -36,8 +36,8 @@ class Favorites extends Component {
     return (
       <div>
         <div className="jumbotron text-center">
-          <h1>Your Favorite Quotes</h1>
-          <p>Your very best quotes.</p>
+          <h1>Your Favorite Articles</h1>
+          <p>Your very best articles.</p>
         </div>
         <div className="container">
         <div className="row">

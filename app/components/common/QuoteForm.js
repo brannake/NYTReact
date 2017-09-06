@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import API from "../../utils/API";
+import Favorites from "../Favorites";
 
 class QuoteForm extends Component {
   constructor() {
@@ -32,8 +33,6 @@ class QuoteForm extends Component {
   SaveButton(abstract) {
     API.saveQuote(abstract).then((res) => {
       console.log(res);
-      const favoriteArticles = res.data;
-      this.setState({Favorites: favoriteArticles}, function() {console.log(this.state)});
     });
   }
 
@@ -121,15 +120,17 @@ class QuoteForm extends Component {
             {this.state.ArticleResponse.response.docs.map(doc =>
             <div key={doc.abstract}>{doc.abstract}
               <button
-              onClick={this.SaveButton(doc.abstract)}
-              className="btn btn-success"
-              style={styles.buttonStyle}
+                onClick={() =>{this.SaveButton(doc.abstract)}}
+                className="btn btn-success"
+                style={styles.buttonStyle}
               >
               Save  
               </button>
               <br/>
             </div>
           )}
+          <Favorites>
+          </Favorites>
             </div>
           </div>
         </div>
